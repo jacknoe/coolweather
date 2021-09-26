@@ -1,6 +1,7 @@
 package com.coolweather.android;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -78,7 +79,13 @@ public class AreaFragment extends Fragment {
                     queryCities();
                 }else if(currentLevel==LEVEL_CITY){
                     selectedCity = cityList.get(position);
-                    queryCounty();
+                    queryCounties();
+                }else if (currentLevel==LEVEL_COUNTY){
+                    String weatherId = countyList.get(position).getWeatherId();
+                    Intent intent = new Intent(getActivity(), WeatherActivity.class);
+                    intent.putExtra("weather_id",weatherId);
+                    startActivity(intent);
+                    getActivity().finish();
                 }
             }
         });
@@ -135,7 +142,7 @@ public class AreaFragment extends Fragment {
         }
     }
 
-    private void queryCounty(){
+    private void queryCounties(){
         titleText.setText(selectedCity.getCityName());
         backButton.setVisibility(View.VISIBLE);
         countyList = DataSupport.where("cityid = ?", String.valueOf(selectedCity.getId())).find(County.class);
@@ -151,6 +158,7 @@ public class AreaFragment extends Fragment {
             int provinceCode = selectedProvince.getProvinceCode();
             int cityCode = selectedCity.getCityCode();
             String address = "http://guolin.tech/api/china/"+provinceCode+"/"+cityCode;
+            Log.d("zhangke_address",address);
             queryFromServer(address,"county");
         }
     }
@@ -192,7 +200,7 @@ public class AreaFragment extends Fragment {
                             }else if("city".equals(type)){
                                 queryCities();
                             }else if("county".equals(type)){
-                                queryCounty();
+                                queryCounties();
                             }
                         }
                     });
