@@ -20,7 +20,7 @@ public class Utility {
             JSONObject jsonObject = new JSONObject(response);
             JSONArray jsonArray = jsonObject.getJSONArray("HeWeather");
             String weatherContent = jsonArray.getJSONObject(0).toString();
-            Log.d("zhangke_weatherContent",weatherContent);
+            Log.d("zhangke_weatherContent1",weatherContent);
             return new Gson().fromJson(weatherContent,Weather.class);
         } catch (JSONException e) {
             e.printStackTrace();
